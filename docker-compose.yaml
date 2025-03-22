@@ -1,0 +1,16 @@
+services:
+  database:
+    container_name: postgres_db
+    image: postgres:17.4-alpine3.21
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - backend_network
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+networks:
+  backend_network:
+    driver: bridge
+    name: task_cloud_network
