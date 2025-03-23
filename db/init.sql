@@ -2,7 +2,7 @@ CREATE TABLE users
 (
     user_id           SERIAL PRIMARY KEY,
     email             VARCHAR(254) NOT NULL,
-    password          VARCHAR(32)  NOT NULL,
+    password          VARCHAR(60)  NOT NULL,
     profile_image_url VARCHAR(255),
     username          VARCHAR(64)  NOT NULL UNIQUE
 );
