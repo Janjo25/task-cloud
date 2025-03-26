@@ -1,40 +1,43 @@
-CREATE TABLE users
+-- User Accounts
+CREATE TABLE account
 (
-    user_id           SERIAL PRIMARY KEY,
-    email             VARCHAR(254) NOT NULL,
+    account_id        INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    email             VARCHAR(254) NOT NULL UNIQUE,
     password          VARCHAR(60)  NOT NULL,
     profile_image_url VARCHAR(255),
     username          VARCHAR(64)  NOT NULL UNIQUE
 );
 
-CREATE TABLE tasks
+-- User Files
+CREATE TABLE file
 (
-    task_id       SERIAL PRIMARY KEY,
-    completed     BOOLEAN   DEFAULT FALSE,
-    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    description   TEXT,
-    title         VARCHAR(255) NOT NULL,
-
-    user_id       INTEGER      NOT NULL,
-
-    CONSTRAINT fk_user
-        FOREIGN KEY (user_id)
-            REFERENCES users (user_id)
-            ON DELETE CASCADE
-);
-
-CREATE TABLE files
-(
-    file_id     SERIAL PRIMARY KEY,
+    file_id     INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     file_name   VARCHAR(255) NOT NULL,
     file_type   VARCHAR(128) NOT NULL,
     file_url    VARCHAR(255) NOT NULL,
-    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    uploaded_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 
-    user_id     INTEGER      NOT NULL,
+    account_id  INTEGER      NOT NULL,
 
-    CONSTRAINT fk_user_file
-        FOREIGN KEY (user_id)
-            REFERENCES users (user_id)
+    CONSTRAINT fk_file_account
+        FOREIGN KEY (account_id)
+            REFERENCES account (account_id)
+            ON DELETE CASCADE
+);
+
+-- User Tasks
+CREATE TABLE task
+(
+    task_id     INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    completed   BOOLEAN     DEFAULT FALSE,
+    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    description TEXT,
+    title       VARCHAR(255) NOT NULL,
+
+    account_id  INTEGER      NOT NULL,
+
+    CONSTRAINT fk_task_account
+        FOREIGN KEY (account_id)
+            REFERENCES account (account_id)
             ON DELETE CASCADE
 );
