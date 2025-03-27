@@ -1,0 +1,37 @@
+@baseURL = http://localhost:3000
+
+### Successful registration
+POST {{baseURL}}/users/register
+Content-Type: application/json
+
+{
+  "email": "user{{$random.integer(1000,9999)}}@example.com",
+  "password": "password",
+  "confirmPassword": "password",
+  "profileImageURL": "https://example.com/images/{{$random.uuid}}.png",
+  "username": "user{{$random.alphabetic(4)}}"
+}
+
+### Password mismatch
+POST {{baseURL}}/users/register
+Content-Type: application/json
+
+{
+  "email": "user{{$random.integer(1000,9999)}}@example.com",
+  "password": "password",
+  "confirmPassword": "mismatch",
+  "profileImageURL": "https://example.com/images/{{$random.uuid}}.png",
+  "username": "user{{$random.alphabetic(4)}}"
+}
+
+### Username already exists
+POST {{baseURL}}/users/register
+Content-Type: application/json
+
+{
+  "email": "user{{$random.integer(1000,9999)}}@example.com",
+  "password": "password",
+  "confirmPassword": "password",
+  "profileImageURL": "https://example.com/images/{{$random.uuid}}.png",
+  "username": "alice_s"
+}
