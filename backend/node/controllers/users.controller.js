@@ -4,7 +4,7 @@ const db = require("../config/db");
 const {findUserByUsername} = require("../models/users.model");
 
 async function registerUser(request, response) {
-    const {email, password, confirmPassword, profileImageURL, username} = request.body;
+    const {email, password, confirmPassword, profileImageUrl, username} = request.body;
     const requiredFields = [email, password, confirmPassword, username];
 
     // Validates the required fields.
@@ -27,7 +27,7 @@ async function registerUser(request, response) {
         await db.query(
             `INSERT INTO account (email, password, profile_image_url, username)
              VALUES ($1, $2, $3, $4)`,
-            [email, hashedPassword, profileImageURL || null, username]
+            [email, hashedPassword, profileImageUrl || null, username]
         );
 
         return response.status(201).json({message: "Usuario registrado exitosamente."});
