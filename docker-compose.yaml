@@ -1,6 +1,6 @@
 services:
   database:
-    container_name: postgres_db
+    container_name: database
     image: postgres:17.4-alpine3.21
     restart: unless-stopped
     env_file:
@@ -9,6 +9,21 @@ services:
       - backend_network
     ports:
       - "${POSTGRES_PORT}:5432"
+
+  node-backend:
+    build: ./backend/node
+    container_name: node_backend
+    restart: unless-stopped
+    depends_on:
+      - database
+    env_file:
+      - .env
+    networks:
+      - backend_network
+    ports:
+      - "${NODE_PORT}:3000"
+    volumes:
+      - ./backend/node:/app
 
 networks:
   backend_network:
