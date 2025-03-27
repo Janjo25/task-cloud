@@ -1,18 +1,20 @@
+const camelcaseKeys = require("camelcase-keys").default;
 /** @type {import("pg").Pool} */
 const db = require("../config/db");
 
 async function findUserByUsername(username) {
     const query = `
         SELECT
-            account_id        AS accountId,
+            account_id,
             email,
-            profile_image_url AS profileImageUrl,
+            password,
+            profile_image_url,
             username
         FROM account
         WHERE username = $1;
     `;
     const result = await db.query(query, [username]);
-    return result.rows[0];
+    return camelcaseKeys(result.rows[0]);
 }
 
 module.exports = {
