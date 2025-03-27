@@ -4,9 +4,9 @@ const db = require("../config/db");
 async function findUserByUsername(username) {
     const query = `
         SELECT
-            account_id        AS accountID,
+            account_id        AS accountId,
             email,
-            profile_image_url AS profileImageURL,
+            profile_image_url AS profileImageUrl,
             username
         FROM account
         WHERE username = $1;
