@@ -1,0 +1,21 @@
+@authToken = {{authToken}}
+@baseURL = http://localhost:3000
+
+### Successful creation
+POST {{baseURL}}/tasks/create
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "description": "This task was auto-generated at {{$isoTimestamp}}.",
+  "title": "Task {{$random.uuid}}"
+}
+
+### Missing token
+POST {{baseURL}}/tasks/create
+Content-Type: application/json
+
+{
+  "description": "This task was auto-generated at {{$isoTimestamp}}.",
+  "title": "Task {{$random.uuid}}"
+}
