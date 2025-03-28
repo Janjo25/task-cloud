@@ -13,6 +13,19 @@ async function createTask(accountId, description, title) {
     return camelcaseKeys(result.rows[0]);
 }
 
+async function getTasksByUserId(accountId) {
+    const query = `
+        SELECT task_id, completed, created_at, description, title, account_id
+        FROM task
+        WHERE account_id = $1
+        ORDER BY created_at DESC;
+    `;
+    const values = [accountId];
+    const result = await db.query(query, values);
+    return camelcaseKeys(result.rows);
+}
+
 module.exports = {
     createTask,
+    getTasksByUserId,
 };
