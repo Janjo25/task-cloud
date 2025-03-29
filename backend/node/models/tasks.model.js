@@ -25,6 +25,19 @@ async function getTasksByUserId(accountId) {
     return camelcaseKeys(result.rows);
 }
 
+async function toggleCompletion(taskId, accountId) {
+    const query = `
+        UPDATE task
+        SET completed = NOT completed
+        WHERE task_id = $1
+          AND account_id = $2
+        RETURNING account_id, completed, created_at, description, title;
+    `;
+    const values = [taskId, accountId];
+    const result = await db.query(query, values);
+    return camelcaseKeys(result.rows[0]);
+}
+
 // updateTask updates the title and description of a task.
 async function updateTask(taskId, description, title, accountId) {
     const query = `
@@ -44,5 +57,6 @@ async function updateTask(taskId, description, title, accountId) {
 module.exports = {
     createTask,
     getTasksByUserId,
+    toggleCompletion,
     updateTask,
 };

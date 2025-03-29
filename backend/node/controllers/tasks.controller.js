@@ -1,6 +1,7 @@
 const {
     createTask: createTaskModel,
     getTasksByUserId,
+    toggleCompletion: toggleCompletionModel,
     updateTask: updateTaskModel,
 } = require("../models/tasks.model");
 
@@ -41,6 +42,31 @@ async function getTasks(request, response) {
     }
 }
 
+// ToggleCompletion toggles the completion status of a task.
+async function toggleCompletion(request, response) {
+    const accountId = request.user.id;
+    const taskId = parseInt(request.params.id, 10);
+
+    // Validates that the task ID is a number.
+    if (isNaN(taskId)) return response.status(400).json({error: "ID de tarea inválido."});
+
+    try {
+        // Toggles the completion status of the task in the database.
+        const updated = await toggleCompletionModel(taskId, accountId);
+
+        // Checks if the task was toggled.
+        if (!updated) return response.status(404).json({error: "Tarea no encontrada."});
+
+        return response.status(200).json({
+            message: "Estado de tarea actualizado exitosamente.",
+            updated,
+        });
+    } catch (error) {
+        console.error("ERROR - Failed to toggle task completion:", error);
+        return response.status(500).json({error: "Error interno al actualizar estado de tarea."});
+    }
+}
+
 // updateTask updates the title and description of a task.
 async function updateTask(request, response) {
     const {title, description} = request.body;
@@ -73,5 +99,6 @@ async function updateTask(request, response) {
 module.exports = {
     createTask,
     getTasks,
+    toggleCompletion,
     updateTask,
 };
