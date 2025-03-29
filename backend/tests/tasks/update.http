@@ -1,0 +1,21 @@
+@authToken = {{authToken}}
+@baseURL = http://localhost:3000
+
+### Successful update
+PATCH {{baseURL}}/tasks/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "description": "This task was updated at {{$isoTimestamp}}.",
+  "title": "Updated Task {{$random.uuid}}"
+}
+
+### Missing token
+PATCH {{baseURL}}/tasks/1
+Content-Type: application/json
+
+{
+  "description": "This task was updated at {{$isoTimestamp}}.",
+  "title": "Updated Task {{$random.uuid}}"
+}
