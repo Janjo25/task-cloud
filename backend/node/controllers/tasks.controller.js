@@ -1,5 +1,6 @@
 const {
     createTask: createTaskModel,
+    getTasksByUserId,
 } = require("../models/tasks.model");
 
 
@@ -23,6 +24,23 @@ async function createTask(request, response) {
     }
 }
 
+async function getTasks(request, response) {
+    const accountId = request.user.id;
+
+    try {
+        // Retrieves the tasks from the database.
+        const tasks = await getTasksByUserId(accountId);
+        return response.status(200).json({
+            message: "Tareas obtenidas exitosamente.",
+            tasks,
+        });
+    } catch (error) {
+        console.error("ERROR - Failed to get tasks:", error);
+        return response.status(500).json({error: "Error interno al obtener tareas."});
+    }
+}
+
 module.exports = {
     createTask,
+    getTasks,
 };
