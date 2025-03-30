@@ -1,5 +1,6 @@
 const {
     createTask: createTaskModel,
+    deleteTask: deleteTaskModel,
     getTasksByUserId,
     toggleCompletion: toggleCompletionModel,
     updateTask: updateTaskModel,
@@ -26,6 +27,30 @@ async function createTask(request, response) {
     }
 }
 
+async function deleteTask(request, response) {
+    const accountId = request.user.id;
+    const taskId = parseInt(request.params.id, 10);
+
+    // Validates that the task ID is a number.
+    if (isNaN(taskId)) return response.status(400).json({error: "ID de tarea inválido."});
+
+    try {
+        // Deletes the task from the database.
+        const deleted = await deleteTaskModel(taskId, accountId);
+
+        // Checks if the task was deleted.
+        if (!deleted) return response.status(404).json({error: "Tarea no encontrada."});
+
+        return response.status(200).json({
+            deleted,
+            message: "Tarea eliminada exitosamente.",
+        });
+    } catch (error) {
+        console.error("ERROR - Failed to delete task:", error);
+        return response.status(500).json({error: "Error interno al eliminar tarea."});
+    }
+}
+
 async function getTasks(request, response) {
     const accountId = request.user.id;
 
@@ -42,7 +67,7 @@ async function getTasks(request, response) {
     }
 }
 
-// ToggleCompletion toggles the completion status of a task.
+// ToggleCompletion toggles the completion status of a task. Not to be confused with updateTask.
 async function toggleCompletion(request, response) {
     const accountId = request.user.id;
     const taskId = parseInt(request.params.id, 10);
@@ -67,7 +92,8 @@ async function toggleCompletion(request, response) {
     }
 }
 
-// updateTask updates the title and description of a task.
+// TODO: Add validation to check if the task ID is a number.
+// updateTask updates the title and description of a task. Not to be confused with toggleCompletion.
 async function updateTask(request, response) {
     const {title, description} = request.body;
     const accountId = request.user.id;
@@ -98,6 +124,7 @@ async function updateTask(request, response) {
 
 module.exports = {
     createTask,
+    deleteTask,
     getTasks,
     toggleCompletion,
     updateTask,
