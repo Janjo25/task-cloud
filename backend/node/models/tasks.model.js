@@ -13,6 +13,19 @@ async function createTask(accountId, description, title) {
     return camelcaseKeys(result.rows[0]);
 }
 
+async function deleteTask(taskId, accountId) {
+    const query = `
+        DELETE
+        FROM task
+        WHERE task_id = $1
+          AND account_id = $2
+    `;
+    const values = [taskId, accountId];
+    const result = await db.query(query, values);
+    return result.rowCount === 1;
+}
+
+// TODO: Split the SELECT clause into multiple lines.
 async function getTasksByUserId(accountId) {
     const query = `
         SELECT task_id, completed, created_at, description, title, account_id
@@ -25,6 +38,7 @@ async function getTasksByUserId(accountId) {
     return camelcaseKeys(result.rows);
 }
 
+// toggleCompletion toggles the completion status of a task. Not to be confused with updateTask.
 async function toggleCompletion(taskId, accountId) {
     const query = `
         UPDATE task
@@ -38,7 +52,7 @@ async function toggleCompletion(taskId, accountId) {
     return camelcaseKeys(result.rows[0]);
 }
 
-// updateTask updates the title and description of a task.
+// updateTask updates the title and description of a task. Not to be confused with toggleCompletion.
 async function updateTask(taskId, description, title, accountId) {
     const query = `
         UPDATE task
@@ -56,6 +70,7 @@ async function updateTask(taskId, description, title, accountId) {
 
 module.exports = {
     createTask,
+    deleteTask,
     getTasksByUserId,
     toggleCompletion,
     updateTask,
