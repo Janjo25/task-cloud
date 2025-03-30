@@ -1,0 +1,22 @@
+@authToken = {{authToken}}
+@baseURL = http://localhost:3000
+
+### Successful toggle
+PATCH {{baseURL}}/tasks/1/toggle
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Inexistent task ID
+PATCH {{baseURL}}/tasks/9999/toggle
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Invalid task ID
+PATCH {{baseURL}}/tasks/nil/toggle
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+
+### Missing token
+PATCH {{baseURL}}/tasks/1/toggle
+Content-Type: application/json
