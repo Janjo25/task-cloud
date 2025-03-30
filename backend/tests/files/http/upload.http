@@ -1,0 +1,14 @@
+@authToken = {{authToken}}
+@baseURL = http://localhost:3000
+
+### Successful upload
+POST {{baseURL}}/files
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="lorem-ipsum.txt"
+Content-Type: text/plain
+
+< ../mock-data/lorem-ipsum.txt
+--WebAppBoundary--
