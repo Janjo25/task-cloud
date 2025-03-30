@@ -1,0 +1,22 @@
+@authToken = {{authToken}}
+@baseURL = http://localhost:3000
+
+### Successful deletion
+DELETE {{baseURL}}/tasks/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Inexistent task ID
+DELETE {{baseURL}}/tasks/9999
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Invalid task ID
+DELETE {{baseURL}}/tasks/nil
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+
+### Missing token
+DELETE {{baseURL}}/tasks/1
+Content-Type: application/json
