@@ -1,9 +1,77 @@
 @authToken = {{authToken}}
 @baseURL = http://localhost:3000
 
-### Successful upload
+### Successful text file upload
 POST {{baseURL}}/files
 Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="lorem-ipsum.txt"
+Content-Type: text/plain
+
+< ../mock-data/lorem-ipsum.txt
+--WebAppBoundary--
+
+### Successful GIF file upload
+POST {{baseURL}}/files
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="brother-where-you-bound.gif"
+Content-Type: image/gif
+
+< ../mock-data/brother-where-you-bound.gif
+--WebAppBoundary--
+
+### Successful JPEG file upload
+POST {{baseURL}}/files
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="paranoid.jpeg"
+Content-Type: image/jpeg
+
+< ../mock-data/paranoid.jpeg
+--WebAppBoundary--
+
+### Successful PNG file upload
+POST {{baseURL}}/files
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="secret-treaties.png"
+Content-Type: image/png
+
+< ../mock-data/secret-treaties.png
+--WebAppBoundary--
+
+### Successful WebP file upload
+POST {{baseURL}}/files
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="the-turn-of-a-friendly-card.webp"
+Content-Type: image/webp
+
+< ../mock-data/the-turn-of-a-friendly-card.webp
+--WebAppBoundary--
+
+### Missing file upload
+POST {{baseURL}}/files
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+
+--WebAppBoundary--
+
+### Missing token
+POST {{baseURL}}/files
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
