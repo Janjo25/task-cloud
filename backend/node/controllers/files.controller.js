@@ -1,6 +1,22 @@
 const {MulterError} = require("multer");
 const upload = require("../middlewares/uploadFile");
-const {saveFile} = require("../models/files.model");
+const {getFilesByUserId, saveFile,} = require("../models/files.model");
+
+async function getFiles(request, response) {
+    const accountId = request.user.id;
+
+    try {
+        // Retrieves the files from the database.
+        const files = await getFilesByUserId(accountId);
+        return response.status(200).json({
+            files,
+            message: "Archivos obtenidos exitosamente.",
+        });
+    } catch (error) {
+        console.error("ERROR - Failed to get files:", error);
+        return response.status(500).json({error: "Error interno al obtener archivos."});
+    }
+}
 
 function uploadFile(request, response) {
     upload.single("file")(request, response, async (error) => {
@@ -37,5 +53,6 @@ function uploadFile(request, response) {
 }
 
 module.exports = {
+    getFiles,
     uploadFile,
 };
