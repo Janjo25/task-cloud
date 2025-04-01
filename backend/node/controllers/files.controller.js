@@ -1,6 +1,34 @@
 const {MulterError} = require("multer");
 const upload = require("../middlewares/uploadFile");
-const {getFilesByUserId, saveFile,} = require("../models/files.model");
+const {
+    deleteFile: deleteFileModel,
+    getFilesByUserId,
+    saveFile,
+} = require("../models/files.model");
+
+async function deleteFile(request, response) {
+    const accountId = request.user.id;
+    const fileId = parseInt(request.params.id, 10);
+
+    // Validates that the file ID is a number.
+    if (isNaN(fileId)) return response.status(400).json({error: "ID de archivo inválido."});
+
+    try {
+        // Deletes the file from the database.
+        const deleted = await deleteFileModel(fileId, accountId);
+
+        // Checks if the file was deleted.
+        if (!deleted) return response.status(404).json({error: "Archivo no encontrado."});
+
+        return response.status(200).json({
+            deleted,
+            message: "Archivo eliminado exitosamente.",
+        });
+    } catch (error) {
+        console.error("ERROR - Failed to delete file:", error);
+        return response.status(500).json({error: "Error interno al eliminar el archivo."});
+    }
+}
 
 async function getFiles(request, response) {
     const accountId = request.user.id;
@@ -53,6 +81,7 @@ function uploadFile(request, response) {
 }
 
 module.exports = {
+    deleteFile,
     getFiles,
     uploadFile,
 };
