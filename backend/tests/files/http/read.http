@@ -1,0 +1,11 @@
+@authToken = {{authToken}}
+@baseURL = http://localhost:3000
+
+### Successful retrieval
+GET {{baseURL}}/files
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+### Missing token
+GET {{baseURL}}/files
+Content-Type: application/json
