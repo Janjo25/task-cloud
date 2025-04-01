@@ -24,12 +24,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     fileFilter: (request, file, cb) => {
-        const allowedTypes = ["text/plain"];
+        const allowedTypes = ["image/gif", "image/jpeg", "image/png", "image/webp", "text/plain"];
 
         if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new Error("Tipo de archivo no permitido. Solo se permiten archivos de texto."), false);
+            cb(new Error("Tipo de archivo no permitido. Solo se permiten imágenes y archivos de texto."), false);
         }
     },
     storage,
