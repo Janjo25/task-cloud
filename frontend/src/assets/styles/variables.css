@@ -1,12 +1,22 @@
 :root {
-    --background-color: #F8F9FA;
     --border-radius: 6px;
-    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    --button-text-color: #F8F9FB;
+    --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --button-text-color: #FFFFFF;
     --font-family: "Arial", sans-serif;
-    --primary-color: #4893C6;
-    --primary-hover: #64A4CE;
-    --secondary-color: #8DBEDC;
-    --secondary-hover: #B7D7EA;
-    --text-color: #212529;
+
+    --input-background-color: #2D3436;
+    --input-border-color: #6B7280;
+    --input-border-hover: #94A3B8;
+    --input-focus-shadow: 0 0 0 2px rgba(148, 164, 184, 0.4);
+    --input-placeholder-color: #CBD5E1;
+
+    --primary-background-color: #161616;
+    --primary-color: #94A3B8;
+    --primary-hover: #64748B;
+
+    --secondary-background-color: #1F1F1F;
+    --secondary-color: #E5E7EB;
+    --secondary-hover: #FFFFFF;
+
+    --text-color: #F9FAFB;
 }
