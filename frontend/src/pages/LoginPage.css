@@ -1,0 +1,19 @@
+.login-box {
+    background-color: var(--secondary-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 25rem;
+    padding: 2rem;
+    width: 100%;
+}
+
+.login-box h1 {
+    font-size: 2rem;
+    margin-block: 0 1rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
