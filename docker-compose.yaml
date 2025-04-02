@@ -6,9 +6,20 @@ services:
     env_file:
       - .env
     networks:
-      - backend_network
+      - task_cloud_network
     ports:
       - "${POSTGRES_PORT}:5432"
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    networks:
+      - task_cloud_network
+    ports:
+      - "${VITE_PORT}:5173"
+    volumes:
+      - ./frontend:/app
 
   node-backend:
     build: ./backend/node
@@ -19,13 +30,13 @@ services:
     env_file:
       - .env
     networks:
-      - backend_network
+      - task_cloud_network
     ports:
       - "${NODE_PORT}:3000"
     volumes:
       - ./backend/node:/app
 
 networks:
-  backend_network:
+  task_cloud_network:
     driver: bridge
     name: task_cloud_network
