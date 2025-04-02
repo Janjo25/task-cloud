@@ -1,5 +1,6 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 
+import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import RequireAuthentication from "../components/RequireAuthentication.jsx";
 
@@ -10,7 +11,7 @@ export default function AppRouter() {
                 <Route path="/login" element={<LoginPage/>}/>
 
                 <Route element={<RequireAuthentication/>}>
-                    {/* TODO: Add private routes. */}
+                    <Route path="/" element={<HomePage/>}/>
                 </Route>
 
                 <Route path="*" element={<Navigate to="/"/>}/>

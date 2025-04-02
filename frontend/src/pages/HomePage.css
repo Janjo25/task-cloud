@@ -1,0 +1,39 @@
+:root {
+    --logout-color: #B91C1C;
+    --logout-hover: #EF4444;
+}
+
+h2 {
+    color: var(--secondary-color);
+}
+
+button.logout-button {
+    background-color: var(--logout-color);
+}
+
+button.logout-button:hover {
+    background-color: var(--logout-hover);
+}
+
+.container.centered {
+    flex-direction: column;
+}
+
+.home-box {
+    font-weight: bold;
+}
+
+.home-options {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.user-avatar {
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--secondary-color);
+    height: 8rem;
+    margin-bottom: 1.5rem;
+    width: 8rem;
+}

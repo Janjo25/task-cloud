@@ -9,6 +9,7 @@ export default function LoginPage() {
 
     const [error, setError] = useState(null);
     const [form, setForm] = useState({username: "", password: ""});
+    const [success, setSuccess] = useState(null);
 
     const handleChange = (event) => setForm({...form, [event.target.name]: event.target.value});
 
@@ -20,9 +21,15 @@ export default function LoginPage() {
 
         try {
             const response = await axios.post("http://localhost:3000/users/login", form);
-            const token = response.data.token;
+
+            const {message, token, user} = response.data;
+
             localStorage.setItem("authenticationToken", token);
-            navigate("/");
+            localStorage.setItem("user", JSON.stringify(user));
+
+            setSuccess(message);
+
+            setTimeout(() => navigate("/"), 1000);
         } catch (error) {
             setError(error.response?.data?.error || "Error al iniciar sesión");
         }
@@ -54,6 +61,7 @@ export default function LoginPage() {
                     <button type="submit">Entrar</button>
 
                     {error && <p className="error">{error}</p>}
+                    {success && <p className="success">{success}</p>}
                 </form>
             </section>
         </main>
