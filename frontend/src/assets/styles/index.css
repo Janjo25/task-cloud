@@ -1,5 +1,6 @@
 @import url("reset.css");
 @import url("variables.css");
+@import url("utilities.css");
 @import url("layout.css");
 
 a {
@@ -19,6 +20,22 @@ body {
     font-family: var(--font-family), sans-serif;
     font-size: 1rem;
     line-height: 1.5;
+}
+
+.anchor-button, button {
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius);
+    border: none;
+    color: var(--button-text-color);
+    cursor: pointer;
+    font: inherit;
+    margin: 0;
+    padding: 0.625em 1em;
+    transition: background 0.4s;
+}
+
+:is(.anchor-button, button):focus, :is(.anchor-button, button):hover {
+    background-color: var(--primary-hover);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -78,20 +95,4 @@ input:focus {
     border-color: var(--input-border-hover);
     box-shadow: var(--input-focus-shadow);
     outline: none;
-}
-
-.anchor-button, button {
-    background-color: var(--primary-color);
-    border-radius: var(--border-radius);
-    border: none;
-    color: var(--button-text-color);
-    cursor: pointer;
-    font: inherit;
-    margin: 0;
-    padding: 0.625em 1em;
-    transition: background 0.4s;
-}
-
-:is(.anchor-button, button):focus, :is(.anchor-button, button):hover {
-    background-color: var(--primary-hover);
 }

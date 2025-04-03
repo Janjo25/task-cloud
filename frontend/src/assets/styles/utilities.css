@@ -1,0 +1,8 @@
+.box {
+    background-color: var(--secondary-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 25rem;
+    padding: 2rem;
+    width: 100%;
+}

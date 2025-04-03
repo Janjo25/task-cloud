@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
 
 import "./LoginPage.css";
@@ -21,7 +21,6 @@ export default function LoginPage() {
 
         try {
             const response = await axios.post("http://localhost:3000/users/login", form);
-
             const {message, token, user} = response.data;
 
             localStorage.setItem("authenticationToken", token);
@@ -37,7 +36,7 @@ export default function LoginPage() {
 
     return (
         <main className="container centered">
-            <section className="login-box">
+            <section className="box login-section">
                 <h1>Iniciar sesión</h1>
 
                 <form className="login-form" onSubmit={handleSubmit}>
@@ -62,6 +61,12 @@ export default function LoginPage() {
 
                     {error && <p className="error">{error}</p>}
                     {success && <p className="success">{success}</p>}
+
+                    <p className="form-footer">
+                        ¿No tenés cuenta?{" "}
+                        <Link to="/register">
+                            Registrate aquí</Link>
+                    </p>
                 </form>
             </section>
         </main>
