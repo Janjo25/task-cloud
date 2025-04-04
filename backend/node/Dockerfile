@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-RUN mkdir -p /app/uploads
+RUN mkdir -p /app/storage/profile-avatars && mkdir -p /app/storage/user-files
 
 EXPOSE 3000
 

@@ -1,8 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-/** @type {import("pg").Pool} */
-const db = require("../config/db");
-const {findUserByUsername} = require("../models/users.model");
+const {
+    createUser: createUserModel,
+    findUserByUsername,
+} = require("../models/users.model");
 
 /**
  * @typedef {Object} User
@@ -51,7 +52,7 @@ async function loginUser(request, response) {
 }
 
 async function registerUser(request, response) {
-    const {email, password, confirmPassword, profileImageUrl, username} = request.body;
+    const {email, password, confirmPassword, username} = request.body;
     const requiredFields = [email, password, confirmPassword, username];
 
     // Validates the required fields.
@@ -70,12 +71,17 @@ async function registerUser(request, response) {
         // Hashes the password before storing it in the database.
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        let profileImageUrl = null;
+        if (request.file) {
+            const baseUrl = `${request.protocol}://${request.get("host")}`;
+            const folderPath = "/storage/profile-avatars/";
+            const filename = request.file.filename;
+
+            profileImageUrl = `${baseUrl}${folderPath}${filename}`;
+        }
+
         // Inserts the new user into the database.
-        await db.query(
-            `INSERT INTO account (email, password, profile_image_url, username)
-             VALUES ($1, $2, $3, $4)`,
-            [email, hashedPassword, profileImageUrl || null, username]
-        );
+        await createUserModel(email, hashedPassword, profileImageUrl, username);
 
         return response.status(201).json({message: "Usuario registrado exitosamente."});
     } catch (error) {

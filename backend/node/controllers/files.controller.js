@@ -1,5 +1,3 @@
-const {MulterError} = require("multer");
-const upload = require("../middlewares/uploadFile");
 const {
     deleteFile: deleteFileModel,
     getFilesByUserId,
@@ -46,38 +44,29 @@ async function getFiles(request, response) {
     }
 }
 
-function uploadFile(request, response) {
-    upload.single("file")(request, response, async (error) => {
-        if (error) {
-            console.error("ERROR - Multer failed:", error);
+async function uploadFile(request, response) {
+    // Validates that a file was uploaded.
+    if (!request.file) return response.status(400).json({error: "No se proporcionó ningún archivo."});
 
-            if (error instanceof MulterError) {
-                return response.status(400).json({error: "Error al procesar el archivo."});
-            }
+    try {
+        // noinspection SpellCheckingInspection
+        const {originalname, mimetype, filename} = request.file;
+        const accountId = request.user.id;
 
-            return response.status(400).json({error: error.message});
-        }
+        const baseUrl = `${request.protocol}://${request.get("host")}`;
+        const folderPath = "/storage/user-files/";
+        const fileUrl = `${baseUrl}${folderPath}${filename}`;
 
-        // Validates that a file was uploaded.
-        if (!request.file) return response.status(400).json({error: "No se proporcionó ningún archivo."});
+        const file = await saveFile(originalname, mimetype, fileUrl, accountId);
 
-        try {
-            // noinspection SpellCheckingInspection
-            const {originalname, mimetype, filename} = request.file;
-            const accountId = request.user.id;
-            const fileUrl = `${request.protocol}://${request.get("host")}/uploads/${filename}`;
-
-            const file = await saveFile(originalname, mimetype, fileUrl, accountId);
-
-            return response.status(201).json({
-                file,
-                message: "Archivo subido exitosamente.",
-            });
-        } catch (error) {
-            console.error("ERROR - Failed to save file:", error);
-            return response.status(500).json({error: "Error interno al guardar el archivo."});
-        }
-    });
+        return response.status(201).json({
+            file,
+            message: "Archivo subido exitosamente.",
+        });
+    } catch (error) {
+        console.error("ERROR - Failed to save file:", error);
+        return response.status(500).json({error: "Error interno al guardar el archivo."});
+    }
 }
 
 module.exports = {
