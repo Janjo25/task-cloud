@@ -20,7 +20,7 @@ async function deleteFile(fileId, accountId) {
 
     // Converts the URL to a local file path.
     const {fileUrl} = camelcaseKeys(selectResult.rows[0]);
-    const filePath = join(__dirname, "..", "uploads", basename(fileUrl));
+    const filePath = join(__dirname, "..", "storage", "user-files", basename(fileUrl));
 
     // Deletes the file from the disk. If it fails, logs a warning but continues with the deletion from the database.
     await unlink(filePath).catch((error => console.warn("WARNING - Failed to delete file from disk:", error)));

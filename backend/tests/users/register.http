@@ -2,36 +2,81 @@
 
 ### Successful registration
 POST {{baseURL}}/users/register
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-{
-  "email": "user{{$random.integer(1000,9999)}}@example.com",
-  "password": "password",
-  "confirmPassword": "password",
-  "profileImageUrl": "https://example.com/images/{{$random.uuid}}.png",
-  "username": "user{{$random.alphabetic(4)}}"
-}
+--WebAppBoundary
+Content-Disposition: form-data; name="email"
+
+user{{$random.integer(1000,9999)}}@example.com
+--WebAppBoundary
+Content-Disposition: form-data; name="password"
+
+password
+--WebAppBoundary
+Content-Disposition: form-data; name="confirmPassword"
+
+password
+--WebAppBoundary
+Content-Disposition: form-data; name="username"
+
+user{{$random.alphabetic(4)}}
+--WebAppBoundary
+Content-Disposition: form-data; name="profileImage"; filename="avatar-{{$random.uuid}}.webp"
+Content-Type: image/webp
+
+< ../files/mock-data/the-turn-of-a-friendly-card.webp
+--WebAppBoundary--
 
 ### Password mismatch
 POST {{baseURL}}/users/register
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-{
-  "email": "user{{$random.integer(1000,9999)}}@example.com",
-  "password": "password",
-  "confirmPassword": "mismatch",
-  "profileImageUrl": "https://example.com/images/{{$random.uuid}}.png",
-  "username": "user{{$random.alphabetic(4)}}"
-}
+--WebAppBoundary
+Content-Disposition: form-data; name="email"
+
+user{{$random.integer(1000,9999)}}@example.com
+--WebAppBoundary
+Content-Disposition: form-data; name="password"
+
+password
+--WebAppBoundary
+Content-Disposition: form-data; name="confirmPassword"
+
+mismatch
+--WebAppBoundary
+Content-Disposition: form-data; name="username"
+
+user{{$random.alphabetic(4)}}
+--WebAppBoundary
+Content-Disposition: form-data; name="profileImage"; filename="avatar-{{$random.uuid}}.webp"
+Content-Type: image/webp
+
+< ../files/mock-data/the-turn-of-a-friendly-card.webp
+--WebAppBoundary--
 
 ### Username already exists
 POST {{baseURL}}/users/register
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-{
-  "email": "user{{$random.integer(1000,9999)}}@example.com",
-  "password": "password",
-  "confirmPassword": "password",
-  "profileImageUrl": "https://example.com/images/{{$random.uuid}}.png",
-  "username": "alice_s"
-}
+--WebAppBoundary
+Content-Disposition: form-data; name="email"
+
+user{{$random.integer(1000,9999)}}@example.com
+--WebAppBoundary
+Content-Disposition: form-data; name="password"
+
+password
+--WebAppBoundary
+Content-Disposition: form-data; name="confirmPassword"
+
+password
+--WebAppBoundary
+Content-Disposition: form-data; name="username"
+
+alice_s
+--WebAppBoundary
+Content-Disposition: form-data; name="profileImage"; filename="avatar-{{$random.uuid}}.webp"
+Content-Type: image/webp
+
+< ../files/mock-data/the-turn-of-a-friendly-card.webp
+--WebAppBoundary--
