@@ -1,18 +1,13 @@
-:root {
-    --logout-color: #B91C1C;
-    --logout-hover: #EF4444;
-}
-
 h2 {
     color: var(--secondary-color);
 }
 
 button.logout-button {
-    background-color: var(--logout-color);
+    background-color: var(--danger-color);
 }
 
 button.logout-button:hover {
-    background-color: var(--logout-hover);
+    background-color: var(--danger-hover);
 }
 
 .container.centered {
