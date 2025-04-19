@@ -1,0 +1,40 @@
+.task-card {
+    background-color: var(--secondary-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    break-inside: avoid;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    transition: transform 0.2s;
+    width: 100%;
+    word-break: break-word;
+}
+
+.task-card.completed {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+.task-card:hover {
+    transform: scale(1.02);
+}
+
+.task-description {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    display: -webkit-box;
+    overflow: hidden;
+    text-align: left;
+}
+
+.task-title {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    text-align: left;
+}

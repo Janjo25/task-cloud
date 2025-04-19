@@ -1,0 +1,26 @@
+.box.error-section {
+    background-color: inherit;
+    box-shadow: none;
+    max-width: 30rem;
+}
+
+.box.error-section h1 {
+    font-size: 5rem;
+}
+
+.error-image {
+    margin-bottom: -4rem;
+    max-width: 25rem;
+}
+
+.error-section button {
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 0.75em 1.75em;
+}
+
+.error-section p {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    word-break: break-word;
+}

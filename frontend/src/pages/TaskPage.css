@@ -1,0 +1,40 @@
+.empty-icon {
+    font-size: 6rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state {
+    margin-top: 4rem;
+    opacity: 0.6;
+}
+
+.empty-text {
+    max-width: 400px;
+}
+
+.tasks-layout {
+    column-count: 3;
+    column-gap: 1.5rem;
+}
+
+.tasks-section {
+    color: var(--secondary-color);
+    font-size: 2rem;
+}
+
+.tasks-section h1 {
+    font-size: 3rem;
+}
+
+/* Responsive columns for different screen sizes */
+@media (max-width: 900px) {
+    .tasks-layout {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 600px) {
+    .tasks-layout {
+        column-count: 1;
+    }
+}

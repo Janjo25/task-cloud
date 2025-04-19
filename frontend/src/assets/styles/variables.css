@@ -2,6 +2,10 @@
     --border-radius: 6px;
     --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
     --button-text-color: #FFFFFF;
+
+    --danger-color: #B91C1C;
+    --danger-hover: #EF4444;
+
     --font-family: "Arial", sans-serif;
 
     --input-background-color: #2D3436;
@@ -19,4 +23,15 @@
     --secondary-hover: #FFFFFF;
 
     --text-color: #F9FAFB;
+
+    --z-index-behind: -100;  /* For elements placed visually behind the main content */
+    --z-index-base: 0;       /* Default layer for layout blocks, text, and normal elements */
+    --z-index-dropdown: 100; /* Dropdowns, autocomplete panels, inline menus... */
+    --z-index-sticky: 200;   /* Sticky headers, navigation bars, fixed banners... */
+    --z-index-fixed: 300;    /* Fixed buttons, floating panels, persistent controls... */
+    --z-index-toast: 400;    /* Temporary notifications like toasts, alerts, snackbars... */
+    --z-index-modal: 500;    /* Modals, dialogs, blocking UI elements that disable interaction... */
+    --z-index-tooltip: 600;  /* Tooltips, hovercards, small context popups above modals... */
+    --z-index-overlay: 700;  /* Full-screen overlays, drawers, loading screens... */
+    --z-index-max: 1000;     /* Topmost override for critical elements needing full priority */
 }
