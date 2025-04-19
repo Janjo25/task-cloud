@@ -6,3 +6,16 @@
     padding: 2rem;
     width: 100%;
 }
+
+.fab {
+    border-radius: 50%;
+    bottom: 2rem;
+    font-size: 2rem;
+    font-weight: bold;
+    height: 5rem;
+    padding: 0;
+    position: fixed;
+    right: 2rem;
+    width: 5rem;
+    z-index: var(--z-index-fixed);
+}

@@ -11,20 +11,36 @@ button.close-button:hover {
     background-color: var(--danger-hover);
 }
 
+.modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
 .modal-content {
     animation: fadeIn 0.2s ease-in-out;
     background-color: var(--secondary-background-color);
     border-radius: var(--border-radius);
     font-size: 1.5rem;
     max-height: 90vh;
-    max-width: 40rem;
     overflow-y: auto;
     padding: 2rem;
+    width: 40rem;
 }
 
 .modal-content h2 {
     font-size: 2.25rem;
     margin: 0;
+}
+
+.modal-description-input {
+    background: inherit;
+    border: none;
+    color: inherit;
+    font: inherit;
+    resize: none;
+    width: 100%;
 }
 
 .modal-header {
@@ -55,4 +71,14 @@ button.close-button:hover {
 .modal-title {
     text-align: left;
     word-break: break-word;
+}
+
+.modal-title-input {
+    background: inherit;
+    border: none;
+    color: var(--primary-color);
+    font-size: 2.25rem;
+    font-weight: bold;
+    padding: 0;
+    width: 100%;
 }
