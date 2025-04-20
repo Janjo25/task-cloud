@@ -4,11 +4,11 @@ import {useState} from "react";
 
 import "./TaskModal.css";
 
-export default function TaskModal({mode, onClose, onSave, task}) {
+export default function TaskModal({mode, onClose, onSave, onUpdate, task}) {
     if (mode === "view" && !task) return null;
 
-    const [description, setDescription] = useState(mode === "view" ? task.description : "");
-    const [title, setTitle] = useState(mode === "view" ? task.title : "");
+    const [description, setDescription] = useState(task?.description || "");
+    const [title, setTitle] = useState(task?.title || "");
 
     const handleSave = () => {
         onSave({title, description});
@@ -22,7 +22,7 @@ export default function TaskModal({mode, onClose, onSave, task}) {
                 className="modal-description-input"
                 onChange={(event) => setDescription(event.target.value)}
                 placeholder="Descripción de la tarea"
-                rows="5"
+                rows="15"
                 value={description}
             />
         );
@@ -56,10 +56,18 @@ export default function TaskModal({mode, onClose, onSave, task}) {
 
                 {renderDescription(mode, description, setDescription)}
 
-                {mode === "create" && (
+                {(mode === "create" || mode === "update") && (
                     <footer className="modal-actions">
-                        <button onClick={handleSave}>Guardar</button>
+                        <button onClick={handleSave}>
+                            {mode === "create" ? "Guardar" : "Guardar cambios"}
+                        </button>
                         <button onClick={onClose}>Cancelar</button>
+                    </footer>
+                )}
+
+                {mode === "view" && (
+                    <footer className="modal-actions">
+                        <button onClick={onUpdate}>Editar</button>
                     </footer>
                 )}
             </div>
