@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.delete("/:id", authenticateToken, deleteTask);
 router.get("/", authenticateToken, getTasks);
-router.patch("/:id", authenticateToken, deleteTask);
 router.patch("/:id", authenticateToken, updateTask);
 router.patch("/:id/toggle", authenticateToken, toggleCompletion);
 router.post("/", authenticateToken, createTask);
