@@ -6,7 +6,7 @@ async function createTask(accountId, description, title) {
     const query = `
         INSERT INTO task (account_id, description, title)
         VALUES ($1, $2, $3)
-        RETURNING account_id, completed, created_at, description, title;
+        RETURNING task_id, completed, created_at, description, title;
     `;
     const values = [accountId, description || null, title];
     const result = await db.query(query, values);
@@ -18,14 +18,13 @@ async function deleteTask(taskId, accountId) {
         DELETE
         FROM task
         WHERE task_id = $1
-          AND account_id = $2
+          AND account_id = $2;
     `;
     const values = [taskId, accountId];
     const result = await db.query(query, values);
     return result.rowCount === 1;
 }
 
-// TODO: Split the SELECT clause into multiple lines.
 async function getTasksByUserId(accountId) {
     const query = `
         SELECT task_id, completed, created_at, description, title, account_id
@@ -45,7 +44,7 @@ async function toggleCompletion(taskId, accountId) {
         SET completed = NOT completed
         WHERE task_id = $1
           AND account_id = $2
-        RETURNING account_id, completed, created_at, description, title;
+        RETURNING task_id, completed, created_at, description, title;
     `;
     const values = [taskId, accountId];
     const result = await db.query(query, values);
@@ -56,12 +55,11 @@ async function toggleCompletion(taskId, accountId) {
 async function updateTask(taskId, description, title, accountId) {
     const query = `
         UPDATE task
-        SET
-            description = $1,
+        SET description = $1,
             title       = $2
         WHERE task_id = $3
           AND account_id = $4
-        RETURNING account_id, completed, created_at, description, title;
+        RETURNING task_id, completed, created_at, description, title;
     `;
     const values = [description || null, title, taskId, accountId];
     const result = await db.query(query, values);
