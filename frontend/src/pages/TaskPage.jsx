@@ -132,18 +132,16 @@ export default function TasksPage() {
                 <section className="tasks-section">
                     <h1>Mis Tareas</h1>
 
-                    <div className="tasks-layout">
-                        {tasks.length === 0 ? (
-                            <div className="empty-state">
-                                <FontAwesomeIcon className="empty-icon" icon={faBell}/>
-                                <p className="empty-text">Las tareas que crees aparecerán aquí</p>
-                            </div>
-                        ) : (
-                            tasks.map((task) => (
-                                <TaskCard key={task.taskId} onClick={handleCardClick} task={task}/>
-                            ))
-                        )}
-                    </div>
+                    {tasks.length === 0 ? (
+                        <div className="empty-state">
+                            <FontAwesomeIcon className="empty-icon" icon={faBell}/>
+                            <p className="empty-text">Las tareas que crees aparecerán aquí</p>
+                        </div>
+                    ) : (
+                        <div className="tasks-layout">
+                            {tasks.map(task => <TaskCard key={task.taskId} onClick={handleCardClick} task={task}/>)}
+                        </div>
+                    )}
                 </section>
             </main>
 
