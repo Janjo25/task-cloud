@@ -1,10 +1,10 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCircleCheck, faCircleXmark, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {useState} from "react";
 
 import "./TaskModal.css";
 
-export default function TaskModal({mode, onClose, onSave, onUpdate, task}) {
+export default function TaskModal({mode, onClose, onSave, onToggleCompletion, onUpdate, task}) {
     if (mode === "view" && !task) return null;
 
     const [description, setDescription] = useState(task?.description || "");
@@ -49,7 +49,7 @@ export default function TaskModal({mode, onClose, onSave, onUpdate, task}) {
                     <div className="modal-header-content">
                         {renderTitle(mode, title, setTitle)}
                         <button aria-label="Cerrar" className="close-button" onClick={onClose}>
-                            <FontAwesomeIcon icon={faXmark} size="lg"/>
+                            <FontAwesomeIcon icon={faXmark}/>
                         </button>
                     </div>
                 </header>
@@ -68,6 +68,13 @@ export default function TaskModal({mode, onClose, onSave, onUpdate, task}) {
                 {mode === "view" && (
                     <footer className="modal-actions">
                         <button onClick={onUpdate}>Editar</button>
+                        <button onClick={onToggleCompletion}>
+                            {
+                                task.completed
+                                    ? <FontAwesomeIcon icon={faCircleXmark}/>
+                                    : <FontAwesomeIcon icon={faCircleCheck}/>
+                            }
+                        </button>
                     </footer>
                 )}
             </div>

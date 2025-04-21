@@ -31,6 +31,21 @@ export async function getTasks() {
     }
 }
 
+export async function toggleCompletion(taskId) {
+    try {
+        const token = localStorage.getItem("authenticationToken");
+        const response = await axios.patch(
+            `${API_URL}/${taskId}/toggle`,
+            {},
+            {headers: {Authorization: `Bearer ${token}`}},
+        );
+
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || "Error al cambiar el estado de la tarea");
+    }
+}
+
 export async function updateTask(taskId, {title, description}) {
     try {
         const token = localStorage.getItem("authenticationToken");

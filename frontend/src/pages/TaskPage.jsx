@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import FloatingActionButton from "../components/FloatingActionButton.jsx";
 import TaskCard from "../components/TaskCard.jsx";
 import TaskModal from "../components/TaskModal.jsx";
-import {createTask, getTasks, updateTask} from "../services/tasks.js";
+import {createTask, getTasks, toggleCompletion, updateTask} from "../services/tasks.js";
 
 import "./TaskPage.css";
 
@@ -30,6 +30,7 @@ export default function TasksPage() {
         })();
     }, []);
 
+    /*──────────────────────────────── Click Handlers ────────────────────────────────*/
     const handleCardClick = (task) => {
         setModalMode("view");
         setSelectedTask(task);
@@ -50,6 +51,7 @@ export default function TasksPage() {
         setModalMode("update");
     };
 
+    /*──────────────────────────────── Tasks Handlers ────────────────────────────────*/
     const handleCreateTask = async ({title, description}) => {
         if (!title.trim()) {
             alert("El título de la tarea es obligatorio.");
@@ -59,6 +61,23 @@ export default function TasksPage() {
         try {
             const {message, task} = await createTask({title, description});
             setTasks((previous) => [task, ...previous]);
+            alert(message);
+            handleCloseModal();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const handleToggleCompletion = async () => {
+        try {
+            const {message, updated} = await toggleCompletion(selectedTask.taskId);
+
+            setTasks((previous) => {
+                return previous.map(
+                    (task) => task.taskId === selectedTask.taskId ? updated : task
+                );
+            });
+
             alert(message);
             handleCloseModal();
         } catch (error) {
@@ -80,7 +99,9 @@ export default function TasksPage() {
             const {message, updated} = await updateTask(selectedTask.taskId, {title, description});
 
             setTasks((previous) => {
-                return previous.map((task) => task.taskId === selectedTask.taskId ? updated : task);
+                return previous.map(
+                    (task) => task.taskId === selectedTask.taskId ? updated : task
+                );
             });
 
             alert(message);
@@ -131,7 +152,13 @@ export default function TasksPage() {
             )}
 
             {modalMode === "view" && selectedTask && (
-                <TaskModal mode="view" onClose={handleCloseModal} onUpdate={handleUpdateClick} task={selectedTask}/>
+                <TaskModal
+                    mode="view"
+                    onClose={handleCloseModal}
+                    onEdit={handleUpdateClick}
+                    onToggleCompletion={handleToggleCompletion}
+                    task={selectedTask}
+                />
             )}
         </>
     );
