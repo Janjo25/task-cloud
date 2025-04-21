@@ -1,6 +1,7 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 
 import ErrorPage from "../pages/ErrorPage.jsx";
+import FilesPages from "../pages/FilePage.jsx";
 import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
@@ -17,6 +18,7 @@ export default function AppRouter() {
 
                 <Route element={<RequireAuthentication/>}>
                     <Route path="/" element={<HomePage/>}/>
+                    <Route path="/files" element={<FilesPages/>}/>
                     <Route path="/tasks" element={<TasksPage/>}/>
                 </Route>
 
