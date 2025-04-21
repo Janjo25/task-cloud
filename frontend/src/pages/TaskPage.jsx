@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import FloatingActionButton from "../components/FloatingActionButton.jsx";
 import TaskCard from "../components/TaskCard.jsx";
 import TaskModal from "../components/TaskModal.jsx";
-import {createTask, getTasks} from "../services/tasks.js";
+import {createTask, getTasks, toggleCompletion, updateTask} from "../services/tasks.js";
 
 import "./TaskPage.css";
 
@@ -30,6 +30,7 @@ export default function TasksPage() {
         })();
     }, []);
 
+    /*──────────────────────────────── Click Handlers ────────────────────────────────*/
     const handleCardClick = (task) => {
         setModalMode("view");
         setSelectedTask(task);
@@ -46,6 +47,11 @@ export default function TasksPage() {
         setSelectedTask(null);
     };
 
+    const handleUpdateClick = () => {
+        setModalMode("update");
+    };
+
+    /*──────────────────────────────── Tasks Handlers ────────────────────────────────*/
     const handleCreateTask = async ({title, description}) => {
         if (!title.trim()) {
             alert("El título de la tarea es obligatorio.");
@@ -55,6 +61,49 @@ export default function TasksPage() {
         try {
             const {message, task} = await createTask({title, description});
             setTasks((previous) => [task, ...previous]);
+            alert(message);
+            handleCloseModal();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const handleToggleCompletion = async () => {
+        try {
+            const {message, updated} = await toggleCompletion(selectedTask.taskId);
+
+            setTasks((previous) => {
+                return previous.map(
+                    (task) => task.taskId === selectedTask.taskId ? updated : task
+                );
+            });
+
+            alert(message);
+            handleCloseModal();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const handleUpdateTask = async ({title, description}) => {
+        const titleChanged = title.trim() !== selectedTask.title.trim();
+        const descriptionChanged = (description || "").trim() !== (selectedTask.description || "").trim();
+        const hasChanges = titleChanged || descriptionChanged;
+
+        if (!hasChanges) {
+            alert("Se requiere al menos un campo para actualizar.");
+            return;
+        }
+
+        try {
+            const {message, updated} = await updateTask(selectedTask.taskId, {title, description});
+
+            setTasks((previous) => {
+                return previous.map(
+                    (task) => task.taskId === selectedTask.taskId ? updated : task
+                );
+            });
+
             alert(message);
             handleCloseModal();
         } catch (error) {
@@ -87,16 +136,29 @@ export default function TasksPage() {
                 <FontAwesomeIcon icon={faPlus}/>
             </FloatingActionButton>
 
-            {/* The way the modal is rendered depends on the modal mode.
-              * If the modal is in create mode, a new task can be created by filling in the form.
-              * If the modal is in view mode, the selected task is rendered in the modal.
+            {/* The way the modal is rendered depends on the modal mode:
+              * - In "create" mode, a blank modal is shown to create a new task.
+              * - In "update" mode, the modal is re-rendered with editable fields using the same task data.
+              * - In "view" mode, the selected task is displayed with its details.
+              *
+              * Switching between modes (e.g. from "view" to "update") triggers a new render of the modal.
               */}
             {modalMode === "create" && (
                 <TaskModal mode="create" onClose={handleCloseModal} onSave={handleCreateTask}/>
             )}
 
+            {modalMode === "update" && selectedTask && (
+                <TaskModal mode="update" onClose={handleCloseModal} onSave={handleUpdateTask} task={selectedTask}/>
+            )}
+
             {modalMode === "view" && selectedTask && (
-                <TaskModal mode="view" onClose={handleCloseModal} task={selectedTask}/>
+                <TaskModal
+                    mode="view"
+                    onClose={handleCloseModal}
+                    onEdit={handleUpdateClick}
+                    onToggleCompletion={handleToggleCompletion}
+                    task={selectedTask}
+                />
             )}
         </>
     );
