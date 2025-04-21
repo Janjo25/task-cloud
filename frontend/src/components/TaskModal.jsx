@@ -4,7 +4,7 @@ import {useState} from "react";
 
 import "./TaskModal.css";
 
-export default function TaskModal({mode, onClose, onSave, onToggleCompletion, onUpdate, task}) {
+export default function TaskModal({mode, onClose, onDelete, onSave, onToggleCompletion, onUpdate, task}) {
     if (mode === "view" && !task) return null;
 
     const [description, setDescription] = useState(task?.description || "");
@@ -67,14 +67,15 @@ export default function TaskModal({mode, onClose, onSave, onToggleCompletion, on
 
                 {mode === "view" && (
                     <footer className="modal-actions">
-                        <button onClick={onUpdate}>Editar</button>
-                        <button onClick={onToggleCompletion}>
+                        <button className="update-button" onClick={onUpdate}>Editar</button>
+                        <button className="toggle-button" onClick={onToggleCompletion}>
                             {
                                 task.completed
                                     ? <FontAwesomeIcon icon={faCircleXmark}/>
                                     : <FontAwesomeIcon icon={faCircleCheck}/>
                             }
                         </button>
+                        <button className="delete-button" onClick={onDelete}>Eliminar</button>
                     </footer>
                 )}
             </div>
