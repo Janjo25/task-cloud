@@ -18,11 +18,12 @@ async function deleteTask(taskId, accountId) {
         DELETE
         FROM task
         WHERE task_id = $1
-          AND account_id = $2;
+          AND account_id = $2
+        RETURNING task_id;
     `;
     const values = [taskId, accountId];
     const result = await db.query(query, values);
-    return result.rowCount === 1;
+    return camelcaseKeys(result.rows[0]);
 }
 
 async function getTasksByUserId(accountId) {

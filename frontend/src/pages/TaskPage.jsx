@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import FloatingActionButton from "../components/FloatingActionButton.jsx";
 import TaskCard from "../components/TaskCard.jsx";
 import TaskModal from "../components/TaskModal.jsx";
-import {createTask, getTasks, toggleCompletion, updateTask} from "../services/tasks.js";
+import {createTask, deleteTask, getTasks, toggleCompletion, updateTask} from "../services/tasks.js";
 
 import "./TaskPage.css";
 
@@ -61,6 +61,21 @@ export default function TasksPage() {
         try {
             const {message, task} = await createTask({title, description});
             setTasks((previous) => [task, ...previous]);
+            alert(message);
+            handleCloseModal();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const handleDeleteTask = async () => {
+        if (!window.confirm("¿Estás seguro de eliminar esta tarea? Esta acción no se puede deshacer.")) return;
+
+        try {
+            const {deleted, message} = await deleteTask(selectedTask.taskId);
+
+            setTasks((previous) => previous.filter((task) => task.taskId !== deleted.taskId));
+
             alert(message);
             handleCloseModal();
         } catch (error) {
@@ -155,6 +170,7 @@ export default function TasksPage() {
                 <TaskModal
                     mode="view"
                     onClose={handleCloseModal}
+                    onDelete={handleDeleteTask}
                     onEdit={handleUpdateClick}
                     onToggleCompletion={handleToggleCompletion}
                     task={selectedTask}

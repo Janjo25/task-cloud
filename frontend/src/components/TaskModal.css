@@ -11,6 +11,14 @@ button.close-button:hover {
     background-color: var(--danger-hover);
 }
 
+button.delete-button {
+    background-color: var(--danger-color);
+}
+
+button.delete-button:hover {
+    background-color: var(--danger-hover);
+}
+
 .modal-actions {
     display: flex;
     gap: 0.5rem;

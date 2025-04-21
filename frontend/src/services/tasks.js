@@ -17,6 +17,20 @@ export async function createTask({title, description}) {
     }
 }
 
+export async function deleteTask(taskId) {
+    try {
+        const token = localStorage.getItem("authenticationToken");
+        const response = await axios.delete(
+            `${API_URL}/${taskId}`,
+            {headers: {Authorization: `Bearer ${token}`}},
+        );
+
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || "Error al eliminar la tarea.");
+    }
+}
+
 export async function getTasks() {
     try {
         const token = localStorage.getItem("authenticationToken");
