@@ -2,6 +2,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck, faCircleXmark, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {useState} from "react";
 
+import "./shared/BaseModal.css";
 import "./TaskModal.css";
 
 export default function TaskModal({mode, onClose, onDelete, onSave, onToggleCompletion, onUpdate, task}) {

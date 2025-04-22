@@ -3,7 +3,7 @@ import {faFile, faFileAlt, faFileImage} from "@fortawesome/free-solid-svg-icons"
 
 import "./FileCard.css";
 
-export default function FileCard({file}) {
+export default function FileCard({file, onClick}) {
     const {fileName, fileType, fileUrl} = file;
     const isImage = fileType.startsWith("image/");
     let icon = faFile;
@@ -15,7 +15,7 @@ export default function FileCard({file}) {
     }
 
     return (
-        <div className="file-card">
+        <div className="file-card" onClick={() => onClick(file)}>
             <div className="file-card-preview">
                 {isImage ? (
                     <img alt={fileName} src={fileUrl}/>

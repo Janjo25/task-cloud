@@ -4,14 +4,16 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 import FileCard from "../components/FileCard.jsx";
+import FileModal from "../components/FileModal.jsx";
 import {getFiles} from "../services/files.js";
 
 import "./FilePage.css";
 
-export default function FilesPages() {
+export default function FilePage() {
     const navigate = useNavigate();
 
     const [files, setFiles] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -26,22 +28,33 @@ export default function FilesPages() {
         })();
     }, []);
 
-    return (
-        <main className="container">
-            <section className="files-section">
-                <h1>Mis Archivos</h1>
+    /*──────────────────────────────── Click Handlers ────────────────────────────────*/
+    const handleCardClick = (file) => setSelectedFile(file);
 
-                {files.length === 0 ? (
-                    <div className="empty-state">
-                        <FontAwesomeIcon className="empty-icon" icon={faFolderOpen}/>
-                        <p className="empty-text">Tus archivos aparecerán aquí</p>
-                    </div>
-                ) : (
-                    <div className="files-layout">
-                        {files.map(file => <FileCard key={file.fileId} file={file}/>)}
-                    </div>
-                )}
-            </section>
-        </main>
+    const handleCloseModal = () => setSelectedFile(null);
+
+    return (
+        <>
+            <main className="container">
+                <section className="files-section">
+                    <h1>Mis Archivos</h1>
+
+                    {files.length === 0 ? (
+                        <div className="empty-state">
+                            <FontAwesomeIcon className="empty-icon" icon={faFolderOpen}/>
+                            <p className="empty-text">Tus archivos aparecerán aquí</p>
+                        </div>
+                    ) : (
+                        <div className="files-layout">
+                            {files.map(file => <FileCard key={file.taskId} file={file} onClick={handleCardClick}/>)}
+                        </div>
+                    )}
+                </section>
+            </main>
+
+            {selectedFile && (
+                <FileModal file={selectedFile} onClose={handleCloseModal}/>
+            )}
+        </>
     );
 }
