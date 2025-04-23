@@ -15,3 +15,23 @@ export async function getFiles() {
         throw new Error(error.response?.data?.error || "Error al obtener los archivos.");
     }
 }
+
+export async function uploadFile(formData) {
+    try {
+        const token = localStorage.getItem("authenticationToken");
+        const response = await axios.post(
+            API_URL,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        );
+
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || "Error al subir el archivo.");
+    }
+}

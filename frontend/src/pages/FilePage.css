@@ -15,6 +15,10 @@
     max-width: 400px;
 }
 
+.files-input {
+    display: none;
+}
+
 .files-layout {
     display: grid;
     gap: 1.5rem;
