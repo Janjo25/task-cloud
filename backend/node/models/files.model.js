@@ -30,11 +30,12 @@ async function deleteFile(fileId, accountId) {
         DELETE
         FROM file
         WHERE file_id = $1
-          AND account_id = $2;
+          AND account_id = $2
+        RETURNING file_id;
     `;
     const deleteValues = [fileId, accountId];
     const deleteResult = await db.query(deleteQuery, deleteValues);
-    return deleteResult.rowCount === 1;
+    return camelcaseKeys(deleteResult.rows[0]);
 }
 
 async function getFilesByUserId(accountId) {
