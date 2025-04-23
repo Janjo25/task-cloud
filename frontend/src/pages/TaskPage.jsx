@@ -169,8 +169,8 @@ export default function TasksPage() {
                     mode="view"
                     onClose={handleCloseModal}
                     onDelete={handleDeleteTask}
-                    onEdit={handleUpdateClick}
                     onToggleCompletion={handleToggleCompletion}
+                    onUpdate={handleUpdateClick}
                     task={selectedTask}
                 />
             )}
