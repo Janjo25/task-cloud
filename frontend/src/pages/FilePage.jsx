@@ -1,11 +1,12 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFolderOpen} from "@fortawesome/free-solid-svg-icons";
-import {useEffect, useState} from "react";
+import {faFolderOpen, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 import FileCard from "../components/FileCard.jsx";
 import FileModal from "../components/FileModal.jsx";
-import {getFiles} from "../services/files.js";
+import FloatingActionButton from "../components/FloatingActionButton.jsx";
+import {getFiles, uploadFile} from "../services/files.js";
 
 import "./FilePage.css";
 
@@ -14,6 +15,8 @@ export default function FilePage() {
 
     const [files, setFiles] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
+
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         (async () => {
@@ -33,6 +36,29 @@ export default function FilePage() {
 
     const handleCloseModal = () => setSelectedFile(null);
 
+    const handleUploadClick = () => fileInputRef.current?.click();
+
+    /*──────────────────────────────── Files Handlers ────────────────────────────────*/
+
+    const handleUploadFile = async (event) => {
+        const file = event.target.files[0];
+
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const {file: uploadedFile, message} = await uploadFile(formData);
+            setFiles((previous) => [uploadedFile, ...previous]);
+            alert(message);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            event.target.value = ""; // Clear the input value to allow re-uploading the same file.
+        }
+    };
+
     return (
         <>
             <main className="container">
@@ -51,6 +77,18 @@ export default function FilePage() {
                     )}
                 </section>
             </main>
+
+            <input
+                className="files-input"
+                multiple={false}
+                onChange={handleUploadFile}
+                ref={fileInputRef}
+                type="file"
+            />
+
+            <FloatingActionButton label="Subir archivo" onClick={handleUploadClick}>
+                <FontAwesomeIcon icon={faPlus}/>
+            </FloatingActionButton>
 
             {selectedFile && (
                 <FileModal file={selectedFile} onClose={handleCloseModal}/>
