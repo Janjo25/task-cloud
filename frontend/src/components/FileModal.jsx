@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import "./shared/BaseModal.css";
 import "./FileModal.css";
 
-export default function FileModal({file, onClose}) {
+export default function FileModal({file, onClose, onDelete}) {
     if (!file) return null;
 
     const [textContent, setTextContent] = useState("");
@@ -48,6 +48,10 @@ export default function FileModal({file, onClose}) {
                 </header>
 
                 {renderFile(fileType, fileName, fileUrl, textContent)}
+
+                <footer className="modal-actions">
+                    <button className="delete-button" onClick={onDelete}>Eliminar</button>
+                </footer>
             </div>
         </div>
     );

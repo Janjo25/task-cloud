@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import FileCard from "../components/FileCard.jsx";
 import FileModal from "../components/FileModal.jsx";
 import FloatingActionButton from "../components/FloatingActionButton.jsx";
-import {getFiles, uploadFile} from "../services/files.js";
+import {deleteFile, getFiles, uploadFile} from "../services/files.js";
 
 import "./FilePage.css";
 
@@ -40,6 +40,21 @@ export default function FilePage() {
 
     /*──────────────────────────────── Files Handlers ────────────────────────────────*/
 
+    const handleDeleteFile = async () => {
+        if (!window.confirm("¿Estás seguro de eliminar este archivo? Esta acción no se puede deshacer.")) return;
+
+        try {
+            const {deleted, message} = await deleteFile(selectedFile.fileId);
+
+            setFiles((previous) => previous.filter((file) => file.fileId !== deleted.fileId));
+
+            alert(message);
+            handleCloseModal();
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
     const handleUploadFile = async (event) => {
         const file = event.target.files[0];
 
@@ -72,7 +87,7 @@ export default function FilePage() {
                         </div>
                     ) : (
                         <div className="files-layout">
-                            {files.map(file => <FileCard key={file.taskId} file={file} onClick={handleCardClick}/>)}
+                            {files.map(file => <FileCard key={file.fileId} file={file} onClick={handleCardClick}/>)}
                         </div>
                     )}
                 </section>
@@ -91,7 +106,7 @@ export default function FilePage() {
             </FloatingActionButton>
 
             {selectedFile && (
-                <FileModal file={selectedFile} onClose={handleCloseModal}/>
+                <FileModal file={selectedFile} onClose={handleCloseModal} onDelete={handleDeleteFile}/>
             )}
         </>
     );
