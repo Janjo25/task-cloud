@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const path = require("path");
+const cors = require('cors');
 
 const errorHandler = require("./middlewares/errorHandler");
 const filesRouter = require("./routes/files.routes");
@@ -9,6 +10,10 @@ const tasksRouter = require("./routes/tasks.routes");
 const usersRouter = require("./routes/users.routes");
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
+
 
 app.use(logger("dev"));
 app.use(express.json());

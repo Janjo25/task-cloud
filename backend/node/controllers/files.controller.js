@@ -69,8 +69,34 @@ async function uploadFile(request, response) {
     }
 }
 
+async function registerUploadedFile(request, response) {
+    const accountId = request.user.id;
+    const { originalName, mimeType, url } = request.body;
+
+    console.log("BODY:", request.body);
+
+    if (!originalName || !mimeType || !url) {
+        return response.status(400).json({ error: "Faltan datos del archivo." });
+    }
+
+    try {
+        const file = await saveFile(originalName, mimeType, url, accountId);
+
+        return response.status(201).json({
+            file,
+            message: "Archivo registrado exitosamente.",
+        });
+    } catch (error) {
+        console.error("ERROR - Failed to register file:", error);
+        return response.status(500).json({ error: "Error interno al registrar archivo." });
+    }
+}
+
+
 module.exports = {
     deleteFile,
     getFiles,
     uploadFile,
+    registerUploadedFile,
 };
+

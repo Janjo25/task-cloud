@@ -56,6 +56,8 @@ export default function FilePage() {
     };
 
     const handleUploadFile = async (event) => {
+        console.log("Inside of handleUploadFile");
+
         const file = event.target.files[0];
 
         if (!file) return;

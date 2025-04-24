@@ -45,7 +45,7 @@ export default function RegisterPage() {
         formData.append("username", form.username);
 
         try {
-            const response = await axios.post("http://localhost:3000/users/register", formData);
+            const response = await axios.post("http://18.233.0.18:3000/users/register", formData);
 
             setSuccess(response.data.message);
 

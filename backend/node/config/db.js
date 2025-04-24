@@ -8,7 +8,7 @@ const pool = new Pool({
     port: parseInt(process.env.POSTGRES_PORT),
     user: process.env.POSTGRES_USER,
 
-    ssl: process.env.NODE_ENV === "production" ? {rejectUnauthorized: false} : false,
+    ssl: { rejectUnauthorized: false }
 });
 
 module.exports = pool;

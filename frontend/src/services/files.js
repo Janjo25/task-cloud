@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/files";
+const API_URL = "http://18.233.0.18:3000/files";
 
 export async function deleteFile(fileId) {
     try {
@@ -31,21 +31,47 @@ export async function getFiles() {
 }
 
 export async function uploadFile(formData) {
+    console.log("🐻");
+
     try {
-        const token = localStorage.getItem("authenticationToken");
-        const response = await axios.post(
-            API_URL,
+        console.log("🟡 Subiendo a Lambda...");
+        const s3Response = await axios.post(
+            "https://ee9dyhimqd.execute-api.us-east-1.amazonaws.com/prod/upload",
             formData,
             {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${token}`,
                 },
-            },
+            }
         );
 
-        return response.data;
+        console.log("🟢 Respuesta Lambda:", s3Response.data);
+
+        const s3Url = s3Response.data.url;
+        const file = formData.get("file");
+        const token = localStorage.getItem("authenticationToken");
+
+        console.log("🟡 Registrando en backend...");
+        const backendResponse = await axios.post(
+            "http://18.233.0.18:3000/files/register-s3",
+            {
+                originalName: file.name,
+                mimeType: file.type,
+                url: s3Url,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        console.log("🟢 Registrado:", backendResponse.data);
+
+        return backendResponse.data;
+
     } catch (error) {
-        throw new Error(error.response?.data?.error || "Error al subir el archivo.");
+        console.error("🔴 Error:", error);
+        throw new Error(error.response?.data?.error || "Error inesperado.");
     }
 }
