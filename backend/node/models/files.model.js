@@ -4,8 +4,17 @@ const {unlink} = require("node:fs/promises");
 /** @type {import("pg").Pool} */
 const db = require("../config/db");
 
+require("dotenv").config(); // 💡 Esto carga .env al iniciar
+const AWS = require("aws-sdk");
+
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+});
+const BUCKET = "task-cloud-frontend"; // 💡 Asegúrate que este sea tu bucket real
+
 async function deleteFile(fileId, accountId) {
-    // Looks up the file URL by file ID and account ID to ensure the file belongs to the user.
     const selectQuery = `
         SELECT file_url
         FROM file
@@ -15,17 +24,27 @@ async function deleteFile(fileId, accountId) {
     const selectValues = [fileId, accountId];
     const selectResult = await db.query(selectQuery, selectValues);
 
-    // If no rows are returned, the file does not exist or does not belong to the user.
     if (selectResult.rowCount === 0) return false;
 
-    // Converts the URL to a local file path.
-    const {fileUrl} = camelcaseKeys(selectResult.rows[0]);
-    const filePath = join(__dirname, "..", "storage", "user-files", basename(fileUrl));
+    const { fileUrl } = camelcaseKeys(selectResult.rows[0]);
 
-    // Deletes the file from the disk. If it fails, logs a warning but continues with the deletion from the database.
-    await unlink(filePath).catch((error => console.warn("WARNING - Failed to delete file from disk:", error)));
+    console.log("🧪 Access Key ID:", AWS.config.credentials?.accessKeyId);
 
-    // Deletes the file from the database.
+    // 💥 Nuevo: eliminamos del bucket S3
+    const key = fileUrl.split("/").pop(); // obtenemos solo el nombre del archivo
+    await s3.deleteObject({
+        Bucket: BUCKET,
+        Key: key,
+    }).promise().catch((err) =>
+        console.warn("WARNING - Failed to delete file from S3:", err)
+    );
+
+    // 🧹 Eliminamos el archivo local si existe (puedes comentar esta línea si ya no los guardas localmente)
+    await unlink(join(__dirname, "..", "storage", "user-files", key))
+        .catch((err) =>
+            console.warn("WARNING - Failed to delete file from disk:", err)
+        );
+
     const deleteQuery = `
         DELETE
         FROM file
