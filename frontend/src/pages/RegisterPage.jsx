@@ -9,11 +9,11 @@ export default function RegisterPage() {
 
     const [error, setError] = useState(null);
     const [form, setForm] = useState({
-        email: "",
-        password: "",
-        confirmPassword: "",
+        email: "A@A.com",
+        password: "A",
+        confirmPassword: "A",
         profileImage: null,
-        username: "",
+        username: "A",
     });
     const [success, setSuccess] = useState(null);
 
@@ -28,8 +28,6 @@ export default function RegisterPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        // Clears any previous error message.
         setError(null);
 
         if (form.password !== form.confirmPassword) {
@@ -37,18 +35,51 @@ export default function RegisterPage() {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("email", form.email);
-        formData.append("password", form.password);
-        formData.append("confirmPassword", form.confirmPassword);
-        formData.append("profileImage", form.profileImage);
-        formData.append("username", form.username);
+        let profileImageUrl = null;
+
+        console.log("Antes de subir al S3. Mira comentario.");
+
+        if (form.profileImage) {
+            const imageFormData = new FormData();
+            imageFormData.append("file", form.profileImage);
+
+            console.log("Antes de la mierda");
+
+            try {
+                const lambdaResponse = await axios.post(
+                    "https://ee9dyhimqd.execute-api.us-east-1.amazonaws.com/prod/upload/photo",
+                    imageFormData,
+                    { headers: { "Content-Type": "multipart/form-data" } }
+                );
+
+                profileImageUrl = lambdaResponse.data.url;
+            } catch (uploadError) {
+                console.error("❌ Error al subir avatar a S3:", uploadError);
+                setError("Error al subir imagen de perfil.");
+                return;
+            }
+        }
+
+        const body = {
+            email: form.email,
+            password: form.password,
+            confirmPassword: form.confirmPassword,
+            username: form.username,
+            profileImageUrl: profileImageUrl,
+        };
 
         try {
-            const response = await axios.post("http://18.233.0.18:3000/users/register", formData);
+            const response = await axios.post(
+                "http://18.233.0.18:3000/users/register",
+                body,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
 
             setSuccess(response.data.message);
-
             setTimeout(() => navigate("/login"), 1000);
         } catch (error) {
             setError(error.response?.data?.error || "Error al crear cuenta");

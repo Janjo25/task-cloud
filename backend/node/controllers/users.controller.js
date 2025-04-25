@@ -52,36 +52,26 @@ async function loginUser(request, response) {
 }
 
 async function registerUser(request, response) {
-    const {email, password, confirmPassword, username} = request.body;
+    const {email, password, confirmPassword, username, profileImageUrl} = request.body;
     const requiredFields = [email, password, confirmPassword, username];
 
-    // Validates the required fields.
+    console.log("BODY:", request.body);
+
     if (requiredFields.some(field => !field)) {
         return response.status(400).json({error: "Todos los campos son obligatorios."});
     }
 
-    // Checks if a user with the same username already exists.
     const existingUser = await findUserByUsername(username);
     if (existingUser) return response.status(409).json({error: "El nombre de usuario ya está en uso."});
 
-    // Checks if both passwords match.
-    if (password !== confirmPassword) return response.status(400).json({error: "Las contraseñas no coinciden."});
+    if (password !== confirmPassword) {
+        return response.status(400).json({error: "Las contraseñas no coinciden."});
+    }
 
     try {
-        // Hashes the password before storing it in the database.
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        let profileImageUrl = null;
-        if (request.file) {
-            const baseUrl = `${request.protocol}://${request.get("host")}`;
-            const folderPath = "/storage/profile-avatars/";
-            const filename = request.file.filename;
-
-            profileImageUrl = `${baseUrl}${folderPath}${filename}`;
-        }
-
-        // Inserts the new user into the database.
-        await createUserModel(email, hashedPassword, profileImageUrl, username);
+        await createUserModel(email, hashedPassword, profileImageUrl || null, username);
 
         return response.status(201).json({message: "Usuario registrado exitosamente."});
     } catch (error) {
