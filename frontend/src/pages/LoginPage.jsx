@@ -20,7 +20,7 @@ export default function LoginPage() {
         setError(null);
 
         try {
-            const response = await axios.post("http://18.233.0.18:3000/users/login", form);
+            const response = await axios.post("http://task-cloud-clb-1438915362.us-east-1.elb.amazonaws.com/users/login", form);
             const {message, token, user} = response.data;
 
             localStorage.setItem("authenticationToken", token);

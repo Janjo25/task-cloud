@@ -70,7 +70,7 @@ export default function RegisterPage() {
 
         try {
             const response = await axios.post(
-                "http://18.233.0.18:3000/users/register",
+                "http://task-cloud-clb-1438915362.us-east-1.elb.amazonaws.com/users/register",
                 body,
                 {
                     headers: {

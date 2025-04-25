@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://18.233.0.18:3000/files";
+const API_URL = "http://task-cloud-clb-1438915362.us-east-1.elb.amazonaws.com/files";
 
 export async function deleteFile(fileId) {
     try {
@@ -53,7 +53,7 @@ export async function uploadFile(formData) {
 
         console.log("🟡 Registrando en backend...");
         const backendResponse = await axios.post(
-            "http://18.233.0.18:3000/files/register-s3",
+            "http://task-cloud-clb-1438915362.us-east-1.elb.amazonaws.com/files/register-s3",
             {
                 originalName: file.name,
                 mimeType: file.type,

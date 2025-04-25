@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://18.233.0.18:3000/tasks";
+const API_URL = "http://task-cloud-clb-1438915362.us-east-1.elb.amazonaws.com/tasks";
 
 export async function createTask({title, description}) {
     try {
