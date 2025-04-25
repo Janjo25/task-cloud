@@ -14,6 +14,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/hea", indexRouter);
+
 
 app.use(logger("dev"));
 app.use(express.json());
